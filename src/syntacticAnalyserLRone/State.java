@@ -54,12 +54,12 @@ public class State {
 		try {
 			closure1();
 		} catch (Exception e) {
-			//System.out.println("Chyba C1.");
+			System.out.println("Chyba C1.");
 		}
 		try {
 			transitionsAndReductions();
 		} catch (Exception e) {
-			//System.out.println("Chyba TaR.");
+			System.out.println("Chyba TaR.");
 		}
 		this.stateNumber = counter;
 		counter++;
@@ -129,11 +129,17 @@ public class State {
 			ArrayList<String> rside = item.getLRrule().getRightSide();
 			
 			int i = rside.lastIndexOf(".");
-			if(!(rside.indexOf(".") == rside.size())) {
-				transitions.add(rside.get(i+1));
-			} else {
-				reductions.addAll(item.getExpectedSymbols());
+			System.out.println(i + "  " + rside.size());
+			if(! (rside.indexOf(".") == rside.size()-1)) {
+				this.transitions.add(rside.get(i+1));
+			} 
+			else {
+				this.reductions.addAll(item.getExpectedSymbols());
 			}
+			System.out.println(item.getLRrule().getRightSide().toString());
+			System.out.println("Stav: " + counter);
+			System.out.println("Transitions: " + transitions.toString());
+			System.out.println("Reduction: " + reductions.toString());
 		}
 	}
 	

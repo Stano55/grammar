@@ -18,6 +18,7 @@ public class ActionGotoTables {
 	
 	private void LRoneAutomaton() {
 		
+		try {
 		for(int x = 0; x < states.size(); x++) {
 			State s = states.get(x);
 			ArrayList<LRoneItem> items = new ArrayList<LRoneItem>();
@@ -26,7 +27,8 @@ public class ActionGotoTables {
 				for(int y = 0; y < items.size(); y ++) {
 					LRoneItem l = items.get(y);
 					int i = l.getLRrule().getRightSide().indexOf(".");
-					if(a == l.getLRrule().getRightSide().get(i+1) ) { 
+					
+					if( l.getLRrule().getRightSide().indexOf(".") != l.getLRrule().getRightSide().size()-1 && a == l.getLRrule().getRightSide().get(i+1) ) { 
 						LRoneItem k = new LRoneItem(l.getLRrule(), l.getExpectedSymbols());
 						newItems.add(k);
 					}
@@ -37,7 +39,11 @@ public class ActionGotoTables {
 				states.add(newState);
 				newItems.clear();
 			}	
+		} 
+		} catch (Exception e) {
+			System.out.println("Chyba tu.");
 		}
+		
 		
 	}
 	public ArrayList<State> getStates() {
