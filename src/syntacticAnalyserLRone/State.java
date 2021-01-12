@@ -129,17 +129,12 @@ public class State {
 			ArrayList<String> rside = item.getLRrule().getRightSide();
 			
 			int i = rside.lastIndexOf(".");
-			System.out.println(i + "  " + rside.size());
 			if(! (rside.indexOf(".") == rside.size()-1)) {
 				this.transitions.add(rside.get(i+1));
 			} 
 			else {
 				this.reductions.addAll(item.getExpectedSymbols());
 			}
-			System.out.println(item.getLRrule().getRightSide().toString());
-			System.out.println("Stav: " + counter);
-			System.out.println("Transitions: " + transitions.toString());
-			System.out.println("Reduction: " + reductions.toString());
 		}
 	}
 	

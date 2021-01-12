@@ -27,7 +27,6 @@ public class ActionGotoTables {
 				for(int y = 0; y < items.size(); y ++) {
 					LRoneItem l = items.get(y);
 					int i = l.getLRrule().getRightSide().indexOf(".");
-					
 					if( l.getLRrule().getRightSide().indexOf(".") != l.getLRrule().getRightSide().size()-1 && a == l.getLRrule().getRightSide().get(i+1) ) { 
 						LRoneItem k = new LRoneItem(l.getLRrule(), l.getExpectedSymbols());
 						newItems.add(k);
