@@ -3,6 +3,7 @@ package syntacticAnalyserLRone;
 import java.util.ArrayList;
 
 import grammar.ContextFreeGrammar;
+import grammar.Rule;
 
 public class ActionGotoTables {
 	ArrayList<State> states = new ArrayList<State>();
@@ -13,6 +14,8 @@ public class ActionGotoTables {
 		State state = new State(grammar);
 		states.add(state);
 		LRoneAutomaton();
+		actionTable();
+		gotoTable();
 	}
 	
 	
@@ -42,9 +45,42 @@ public class ActionGotoTables {
 		} catch (Exception e) {
 			System.out.println("Chyba tu.");
 		}
-		
+	}
+	private void actionTable() {
+		String outPut = format("ACTION");
+		for(State s : states) {
+			outPut = outPut + format("s" + s.stateNumber);
+		}
+		System.out.println(outPut);
+		for(String nt : grammar.getTerminals()) {
+			outPut = format(nt);
+			for(State s : states) {
+				if(s.getTransitions().contains(nt)) {
+					outPut = outPut + format("P");
+				} else if (s.getReductions().contains(nt)) {
+					int i = getRuleNumber(s);
+					outPut = outPut + format("R" + i);
+				} else {
+					outPut = outPut + format("");
+				}
+			}
+			System.out.println(outPut);
+		}
+		outPut= format("epsilon");
+		for(State s : states) {
+			if(s.getReductions().contains("epsilon")) {
+				outPut = outPut + format("A");
+			} else {
+				outPut = outPut + format("");
+			}
+		}
+		System.out.println(outPut);
+	}
+	
+	private void gotoTable() {
 		
 	}
+	
 	public ArrayList<State> getStates() {
 		return states;
 	}
@@ -52,5 +88,30 @@ public class ActionGotoTables {
 	public void setStates(ArrayList<State> states) {
 		this.states = states;
 	}
+	
+	private String format(String str) {
+		return String.format("%1$"+7+ "s", str);
+		
+	}
+	
+	private int getRuleNumber(State s) {
+		ArrayList<String> rightSide = new ArrayList<String>();
+		for(LRoneItem i : s.getLrOneItems()) {
+			if(i.getLRrule().getRightSide().indexOf(".") == i.getLRrule().getRightSide().size()-1) {
+				rightSide.addAll(i.getLRrule().getRightSide());
+				rightSide.remove(".");
+			}
+		}
+			int i = 0;
+		for(Rule r : grammar.getRules()) {
+			if(r.getRightSide().equals(rightSide)) {
+				return i;
+			}
+			i++;
+		}
+		
+		return 0;
+	}
+	
 }
 
