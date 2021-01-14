@@ -87,15 +87,11 @@ public class ActionGotoTablesTest {
 	public void test1() {
 		
 		try {
-			boolean firstState = true;
+			
 			ContextFreeGrammar g = new ContextFreeGrammar(terminals, nonterminals, rules1, startsymbol);
 			ActionGotoTables test1 = new ActionGotoTables(g);
 			for(State state : test1.getStates()) {
 				System.out.println("State: " + state.getStateNumber());
-				if(!firstState)
-				System.out.println("Previous state: " + state.getPreviousState() + " and symbol for move: " + state.getSymbol());
-				
-				firstState= false;
 				ArrayList<LRoneItem> items = state.getLrOneItems();
 			
 			for (int i = 0; i < items.size(); i++) {

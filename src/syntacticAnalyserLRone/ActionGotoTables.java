@@ -36,8 +36,7 @@ public class ActionGotoTables {
 					}
 				}
 				State newState = new State(newItems, grammar);
-				newState.previousState = s.stateNumber;
-				newState.symbol = a;
+				s.nextStates.put(a, newState.stateNumber);
 				states.add(newState);
 				newItems.clear();
 			}	
@@ -52,12 +51,12 @@ public class ActionGotoTables {
 			outPut = outPut + format("s" + s.stateNumber);
 		}
 		System.out.println(outPut);
-		for(String nt : grammar.getTerminals()) {
-			outPut = format(nt);
+		for(String t : grammar.getTerminals()) {
+			outPut = format(t);
 			for(State s : states) {
-				if(s.getTransitions().contains(nt)) {
+				if(s.getTransitions().contains(t)) {
 					outPut = outPut + format("P");
-				} else if (s.getReductions().contains(nt)) {
+				} else if (s.getReductions().contains(t)) {
 					int i = getRuleNumber(s);
 					outPut = outPut + format("R" + i);
 				} else {
@@ -75,9 +74,41 @@ public class ActionGotoTables {
 			}
 		}
 		System.out.println(outPut);
+		System.out.println();
 	}
 	
 	private void gotoTable() {
+		String outPut = format("GOTO");
+		for(State s : states) {
+			outPut = outPut + format("s" + s.stateNumber);
+		}
+		
+		System.out.println(outPut);
+		for(String t : grammar.getTerminals()) {
+			outPut = format(t);
+			for(State s : states) {
+				if(s.nextStates.containsKey(t)) {
+					outPut = outPut + format("s" + s.nextStates.get(t));
+				}
+				else {
+					outPut = outPut + format("");
+				}
+			}
+			System.out.println(outPut);
+		}
+		for(String t : grammar.getNonterminals()) {
+			outPut = format(t);
+			for(State s : states) {
+				if(s.nextStates.containsKey(t)) {
+					outPut = outPut + format("s" + s.nextStates.get(t));
+				}
+				else {
+					outPut = outPut + format("");
+				}
+			}
+			System.out.println(outPut);
+		}
+		
 		
 	}
 	
@@ -109,7 +140,6 @@ public class ActionGotoTables {
 			}
 			i++;
 		}
-		
 		return 0;
 	}
 	

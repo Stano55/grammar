@@ -1,6 +1,7 @@
 package syntacticAnalyserLRone;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import FirstandFollow.FirstAndFollowClass;
 import grammar.ContextFreeGrammar;
@@ -9,9 +10,8 @@ import grammar.Rule;
 public class State {
 	
 	private static int counter= 0;
-	int previousState;
-	String symbol;
 	int stateNumber;
+	HashMap<String, Integer> nextStates;
 	ArrayList<LRoneItem> lrOneItems;
 	HashSet<String> transitions;
 	HashSet<String> reductions;
@@ -24,6 +24,7 @@ public class State {
 		this.lrOneItems = new ArrayList<LRoneItem>();
 		this.transitions = new HashSet<String>();
 		this.reductions = new HashSet<String>();
+		this.nextStates = new HashMap<String, Integer>();
 		HashSet<String> expectedSymbols = new HashSet<String>();
 		expectedSymbols.add("epsilon");
 		LRoneItem lrItem = new LRoneItem(grammar.getStartrule(), expectedSymbols);
@@ -49,6 +50,8 @@ public class State {
 		this.lrOneItems.addAll(items);
 		this.transitions = new HashSet<String>();
 		this.reductions = new HashSet<String>();
+		this.nextStates = new HashMap<String, Integer>();
+		
 		
 		
 		try {
@@ -176,19 +179,5 @@ public class State {
 
 	public void setStateNumber(int stateNumber) {
 		this.stateNumber = stateNumber;
-	}
-	public int getPreviousState() {
-		return previousState;
-	}
-
-	public void setPreviousState(int previousState) {
-		this.previousState = previousState;
-	}
-	public String getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
 	}
 }
