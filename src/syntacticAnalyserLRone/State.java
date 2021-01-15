@@ -9,17 +9,17 @@ import grammar.Rule;
 
 public class State {
 	
-	private static int counter= 0;
-	int stateNumber;
-	HashMap<String, Integer> nextStates;
-	ArrayList<LRoneItem> lrOneItems;
-	HashSet<String> transitions;
-	HashSet<String> reductions;
+	private static int counter= 0;							// counter for monitoring states numbers
+	int stateNumber;										// attribute for state number
+	HashMap<String, Integer> nextStates;					// attribute for pairs for monitoring to which states we move from exact state
+	ArrayList<LRoneItem> lrOneItems;						// attribute for storing LR(1) itmes 
+	HashSet<String> transitions;							// attribute for storing symbols on which we make transitions to another state	
+	HashSet<String> reductions;								// attribute for storing symbols on which we make reductions
 	boolean processed;	
 	
 	ContextFreeGrammar grammar;
 	
-	public State(ContextFreeGrammar grammar) {												// constructor for first state		
+	public State(ContextFreeGrammar grammar) {												// constructor for first state, input parameter is context free grammar
 		this.grammar= grammar;
 		this.lrOneItems = new ArrayList<LRoneItem>();
 		this.transitions = new HashSet<String>();
@@ -44,9 +44,9 @@ public class State {
 		counter++;
 	}
 
-	public State(ArrayList<LRoneItem> items, ContextFreeGrammar grammar) {									// constructor when state already contains LR(1) items
-		this.grammar = grammar;
-		this.lrOneItems = new ArrayList<LRoneItem>();
+	public State(ArrayList<LRoneItem> items, ContextFreeGrammar grammar) {									// constructor when we are moving from previous state with LR(1) items
+		this.grammar = grammar;																				// input parameters are set of LR(1) rules which came from previous state and 
+		this.lrOneItems = new ArrayList<LRoneItem>();														// context free grammar
 		this.lrOneItems.addAll(items);
 		this.transitions = new HashSet<String>();
 		this.reductions = new HashSet<String>();
@@ -68,7 +68,7 @@ public class State {
 		counter++;
 	}
 	@SuppressWarnings("static-access")
-	private void closure() throws Exception {
+	private void closure() throws Exception {																		// closure operation for the first state
 		FirstAndFollowClass follow = new FirstAndFollowClass();
 		for (int i = 0; i< lrOneItems.size(); i++) {
 			
@@ -76,12 +76,12 @@ public class State {
 				Rule rule = lrOneItems.get(i).LRrule;
 				for(int j = 0; j < rule.getRightSide().size(); j++) {
 					if(rule.getRightSide().get(j) == ".") {
-						if (grammar.getNonterminals().contains(rule.getRightSide().get(j+1))) { 					// chceck if next symbol after "." is nonterminal	
+						if (grammar.getNonterminals().contains(rule.getRightSide().get(j+1))) { 
 							
 						for(Rule r : grammar.getRules()) {
 							if(r.getLeftSide().get(0) == rule.getRightSide().get(j+1)) {
 								
-								String symbol = r.getLeftSide().get(0);
+								String symbol = rule.getRightSide().get(j+1);
 								LRoneItem item = new LRoneItem(r, follow.Follow(grammar, symbol));
 								lrOneItems.add(item);
 							}
@@ -96,7 +96,7 @@ public class State {
 	}
 	
 	
-	private void closure1() throws Exception {
+	private void closure1() throws Exception {																	//closure operation for other than first state
 		int size = lrOneItems.size();
 		
 		for (int i = 0; i< size; i++) {
@@ -106,7 +106,7 @@ public class State {
 					if(rule.getRightSide().get(j) == ".") {
 						
 						if(!(j+1 == rule.getRightSide().size())) {
-						if (grammar.getNonterminals().contains(rule.getRightSide().get(j+1))) { 					// chceck if next symbol after "." is nonterminal	
+						if (grammar.getNonterminals().contains(rule.getRightSide().get(j+1))) {
 						
 						for(Rule r : grammar.getRules()) {
 							if(r.getLeftSide().get(0) == rule.getRightSide().get(j+1)) {
@@ -125,7 +125,7 @@ public class State {
 		}
 	}
 	
-	private void transitionsAndReductions() {
+	private void transitionsAndReductions() {																		// Operation which adds symbols to transitions and reductions set
 		
 		for(int j = 0; j < lrOneItems.size(); j++) {
 			LRoneItem item = lrOneItems.get(j);

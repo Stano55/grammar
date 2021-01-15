@@ -9,8 +9,8 @@ public class ActionGotoTables {
 	ArrayList<State> states = new ArrayList<State>();
 	private ArrayList<LRoneItem> newItems = new ArrayList<LRoneItem>();
 	private ContextFreeGrammar grammar;
-	public ActionGotoTables(ContextFreeGrammar grammar) {
-		this.grammar = grammar;
+	public ActionGotoTables(ContextFreeGrammar grammar) {													// class  constructor .. input parameter is context free grammar
+		this.grammar = grammar;																				// for which we want to make ACTION and GOTO tables
 		State state = new State(grammar);
 		states.add(state);
 		LRoneAutomaton();
@@ -19,7 +19,7 @@ public class ActionGotoTables {
 	}
 	
 	
-	private void LRoneAutomaton() {
+	private void LRoneAutomaton() {																		// operation which represents LR(1) automaton (creating new states)
 		
 		try {
 		for(int x = 0; x < states.size(); x++) {
@@ -45,7 +45,7 @@ public class ActionGotoTables {
 			System.out.println("Chyba tu.");
 		}
 	}
-	private void actionTable() {
+	private void actionTable() {																	// operation for displaying ACTION table in console
 		String outPut = format("ACTION");
 		for(State s : states) {
 			outPut = outPut + format("s" + s.stateNumber);
@@ -77,7 +77,7 @@ public class ActionGotoTables {
 		System.out.println();
 	}
 	
-	private void gotoTable() {
+	private void gotoTable() {																			// operation for displaying a GOTO table in console
 		String outPut = format("GOTO");
 		for(State s : states) {
 			outPut = outPut + format("s" + s.stateNumber);
@@ -125,8 +125,8 @@ public class ActionGotoTables {
 		
 	}
 	
-	private int getRuleNumber(State s) {
-		ArrayList<String> rightSide = new ArrayList<String>();
+	private int getRuleNumber(State s) {																	// operation to get rule number so we can display that in ACTION table
+		ArrayList<String> rightSide = new ArrayList<String>();												// and know according to which rule we made reduction
 		for(LRoneItem i : s.getLrOneItems()) {
 			if(i.getLRrule().getRightSide().indexOf(".") == i.getLRrule().getRightSide().size()-1) {
 				rightSide.addAll(i.getLRrule().getRightSide());

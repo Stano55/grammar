@@ -6,8 +6,8 @@ import java.util.HashSet;
 import grammar.Rule;
 public class LRoneItem {
 		
-	Rule LRrule;
-	HashSet<String> expectedSymbols = new HashSet<String>();
+	Rule LRrule;													// atribute for LR rule with a "." serving as pointer
+	HashSet<String> expectedSymbols = new HashSet<String>();		// atribute representing expected symbols of exact LR item
 	boolean processed;
 	
 	public LRoneItem(Rule rule, HashSet<String> expectSymbols){    // parameters are rule we want to make a LR(1) item from and expected symbols for that LR(1) items
