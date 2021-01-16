@@ -15,7 +15,6 @@ public class State {
 	ArrayList<LRoneItem> lrOneItems;						// attribute for storing LR(1) itmes 
 	HashSet<String> transitions;							// attribute for storing symbols on which we make transitions to another state	
 	HashSet<String> reductions;								// attribute for storing symbols on which we make reductions
-	boolean processed;	
 	
 	ContextFreeGrammar grammar;
 	
@@ -55,9 +54,9 @@ public class State {
 		
 		
 		try {
-			closure1();
+			closure();
 		} catch (Exception e) {
-			System.out.println("Chyba C1.");
+			//System.out.println("Chyba C1.");
 		}
 		try {
 			transitionsAndReductions();
@@ -67,12 +66,11 @@ public class State {
 		this.stateNumber = counter;
 		counter++;
 	}
+	
 	@SuppressWarnings("static-access")
-	private void closure() throws Exception {																		// closure operation for the first state
-		FirstAndFollowClass follow = new FirstAndFollowClass();
+	private void closure() throws Exception {																		// closure operation
+		FirstAndFollowClass first = new FirstAndFollowClass();
 		for (int i = 0; i< lrOneItems.size(); i++) {
-			
-			if(!lrOneItems.get(i).processed) {
 				Rule rule = lrOneItems.get(i).LRrule;
 				for(int j = 0; j < rule.getRightSide().size(); j++) {
 					if(rule.getRightSide().get(j) == ".") {
@@ -81,47 +79,23 @@ public class State {
 						for(Rule r : grammar.getRules()) {
 							if(r.getLeftSide().get(0) == rule.getRightSide().get(j+1)) {
 								
-								String symbol = rule.getRightSide().get(j+1);
-								LRoneItem item = new LRoneItem(r, follow.Follow(grammar, symbol));
+								try {
+									String symbol = rule.getRightSide().get(j+2);
+									LRoneItem item = new LRoneItem(r, first.first(grammar, symbol));
+									lrOneItems.add(item);
+									continue;
+								} catch (Exception e) {
+									// TODO: handle exception
+								}
+								LRoneItem item = new LRoneItem(r, lrOneItems.get(i).getExpectedSymbols());
 								lrOneItems.add(item);
 							}
 						}
 						
 					}
-					}
-				}
-			}
-			lrOneItems.get(i).setProcessed(true);	
-		}
-	}
-	
-	
-	private void closure1() throws Exception {																	//closure operation for other than first state
-		int size = lrOneItems.size();
-		
-		for (int i = 0; i< size; i++) {
-			if(!lrOneItems.get(i).processed) {
-				Rule rule = lrOneItems.get(i).LRrule;
-				for(int j = 0; j < rule.getRightSide().size(); j++) {
-					if(rule.getRightSide().get(j) == ".") {
-						
-						if(!(j+1 == rule.getRightSide().size())) {
-						if (grammar.getNonterminals().contains(rule.getRightSide().get(j+1))) {
-						
-						for(Rule r : grammar.getRules()) {
-							if(r.getLeftSide().get(0) == rule.getRightSide().get(j+1)) {
-								LRoneItem item = new LRoneItem(r, lrOneItems.get(i).expectedSymbols);
-								lrOneItems.add(item);
-								size++;
-							}
-						}
 						
 					}
-					}
-					}
-				}
-			}
-			lrOneItems.get(i).setProcessed(true);	
+				}	
 		}
 	}
 	
@@ -164,15 +138,7 @@ public class State {
 	public void setLrOneItems(ArrayList<LRoneItem> lrOneItems) {
 		this.lrOneItems = lrOneItems;
 	}
-
-	public boolean isProcessed() {
-		return processed;
-	}
-
-	public void setProcessed(boolean processed) {
-		this.processed = processed;
-	}
-
+	
 	public int getStateNumber() {
 		return stateNumber;
 	}

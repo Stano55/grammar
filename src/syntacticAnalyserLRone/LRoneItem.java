@@ -8,7 +8,6 @@ public class LRoneItem {
 		
 	Rule LRrule;													// atribute for LR rule with a "." serving as pointer
 	HashSet<String> expectedSymbols = new HashSet<String>();		// atribute representing expected symbols of exact LR item
-	boolean processed;
 	
 	public LRoneItem(Rule rule, HashSet<String> expectSymbols){    // parameters are rule we want to make a LR(1) item from and expected symbols for that LR(1) items
 		ArrayList<String> rightSide = new ArrayList<String>();     
@@ -31,7 +30,6 @@ public class LRoneItem {
 		
 		this.LRrule = new Rule(leftSide, rightSide);
 		this.expectedSymbols = expectSymbols;
-		this.processed = false;
 	}
 
 	public Rule getLRrule() {
@@ -52,15 +50,4 @@ public class LRoneItem {
 	public void setExpectedSymbols(HashSet<String> expectedSymbols) {
 		this.expectedSymbols = expectedSymbols;
 	}
-
-
-	public boolean isProcessed() {
-		return processed;
-	}
-
-
-	public void setProcessed(boolean processed) {
-		this.processed = processed;
-	}
-	
 }
