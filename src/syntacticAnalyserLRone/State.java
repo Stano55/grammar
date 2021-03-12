@@ -15,7 +15,6 @@ public class State {
 	ArrayList<LRoneItem> lrOneItems;						// attribute for storing LR(1) itmes 
 	HashSet<String> transitions;							// attribute for storing symbols on which we make transitions to another state	
 	HashSet<String> reductions;								// attribute for storing symbols on which we make reductions
-	
 	ContextFreeGrammar grammar;
 	
 	public State(ContextFreeGrammar grammar) {												// constructor for first state, input parameter is context free grammar
